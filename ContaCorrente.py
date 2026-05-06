@@ -7,7 +7,12 @@ class ContaCorrente(Conta):
 
         self.taxa = taxa
     
-    def sacar(self, valor):
+    # Polimorfismo: alterando o comportamento do saque para incluir a taxa
+    
+    def sacar(self, valor):   
         val_taxa = valor + 1.00
-        self._saldo -= val_taxa
-        print("Saque com taxa Efetuado.")
+        if val_taxa <= self._saldo:
+            self._saldo -= val_taxa
+            print(f"Saque de R${valor:.2f} (Taxa: R$1.00) realizado com sucesso.")
+        else:
+            print("Saldo insuficiente para cobrir o saque e a taxa.")
