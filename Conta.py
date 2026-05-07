@@ -12,22 +12,21 @@ class Conta:
     def depositar(self, valor):
         if valor > 0:
             self._saldo += valor
-            print(f"Depósito de R${valor:.2f} realizado com sucesso.")
+            print(f"\nDepósito de R${valor:.2f} realizado com sucesso.")
 
 
     def sacar(self, valor):
         if valor > 0 and valor <= self._saldo:
             self._saldo -= valor
-            print(f"Saque de R${valor:.2f} realizado com sucesso.")
+            print(f"\nSaque de R${valor:.2f} realizado com sucesso.")
         else:
-            print("Saldo insuficiente para realizar o saque.")
+            print("\nSaldo insuficiente para realizar o saque.")
 
     
     def transferir(self, valor, conta_destino):
-        if self.sacar(valor): # Tenta sacar da conta atual
-            conta_destino.depositar(valor) # Se der certo, deposita na outra
-            print(f"Transferência de R${valor:.2f} realizada para {conta_destino.cliente.nome}.")
-            return True
+        if valor > 0 and valor <= self._saldo:
+            self._saldo -= valor # Realiza o saque na origem e evitar a mensagem de saque.
+            conta_destino._saldo += valor # Realiza o depósito no destino e evitar de aparecer a mensagem deposito.
+            print(f"\nTransferência de R${valor:.2f} realizada para conta de destino: {conta_destino.cliente.nome}.")
         else:
-            print("Transferência cancelada: Saldo insuficiente.")
-            return False
+            print("\nTransferência cancelada: Saldo insuficiente.")

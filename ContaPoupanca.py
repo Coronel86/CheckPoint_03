@@ -11,5 +11,5 @@ class ContaPoupanca(Conta):
     
     def render_juros(self):
         rendimento = self._saldo * 1.01
-        print(f"Juros aplicados! O saldo rendeu R${rendimento:.2f}.")
+        print(f"\nJuros aplicados! O saldo rendeu R${rendimento:.2f}.")
     

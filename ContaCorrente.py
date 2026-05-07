@@ -13,6 +13,6 @@ class ContaCorrente(Conta):
         val_taxa = valor + 1.00
         if val_taxa <= self._saldo:
             self._saldo -= val_taxa
-            print(f"Saque de R${valor:.2f} (Taxa: R$1.00) realizado com sucesso.")
+            print(f"\nSaque de R${valor:.2f} (Taxa: R$1.00) realizado com sucesso.")
         else:
-            print("Saldo insuficiente para cobrir o saque e a taxa.")
+            print("\nSaldo insuficiente para cobrir o saque e a taxa.")

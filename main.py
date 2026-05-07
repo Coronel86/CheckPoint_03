@@ -6,17 +6,6 @@ from Cliente import Cliente
 from Conta import Conta
 
 
-# Configuração inicial do cliente
-cliente = Cliente("Heberton", "123.456.789-00")
-conta = Conta("0001", cliente)
-
-# Conta destino para teste de transferência
-cliente2 = Cliente("Banco Central", "000.000.000-00")
-conta2 = Conta("9999", cliente2)
-
-
-TEMPO = 3 
-
 def salvar_contas(conta_obj):
     dados = {
         "numero": conta_obj.numero,
@@ -28,7 +17,31 @@ def salvar_contas(conta_obj):
     with open("banco.json", "w", encoding="utf-8") as arquivo: 
         # O 'indent=4' deixa o arquivo visualmente organizado (com recuos de 4 espaços)
         json.dump(dados, arquivo, indent=4)
-    print("\nDados salvos com sucesso no banco.json!")
+    print("\nDados salvos no servidor Bank!")
+
+def carregar_dados():
+    if os.path.exists("banco.json"):
+        with open("banco.json", "r", encoding="utf-8") as arquivo:
+            return json.load(arquivo)
+    return None
+
+##### CONFIGURAÇÃO INICIAL #####
+
+cliente = Cliente("Heberton", "123.456.789-00")
+dados_salvos = carregar_dados()
+
+if dados_salvos:
+    conta = Conta(dados_salvos["numero"], cliente)
+    conta._saldo = dados_salvos["saldo"] # Recupera o saldo do arquivo
+else:
+    conta = Conta("0001", cliente)
+
+cliente2 = Cliente("Banco Central", "000.000.000-00")
+conta2 = Conta("9999", cliente2)
+
+TEMPO = 5 
+
+###### LOOP PRINCIPAL ######
 
 while True:
     
@@ -41,8 +54,7 @@ while True:
     print("2- Depositar")
     print("3- Sacar")
     print("4- Transferir")
-    print("5- Salvar Dados")
-    print("6- Sair")
+    print("5- Sair")
 
     opcao = input("\nEscolha uma opção: ")
 
@@ -55,27 +67,27 @@ while True:
         case "2":
             valor = float(input("\nDigite o valor para depósito: "))
             conta.depositar(valor)
+            salvar_contas(conta)
             time.sleep(TEMPO)
         
         case "3":
             valor = float(input("\nDigite o valor para saque: "))
             conta.sacar(valor)
+            salvar_contas(conta)
             time.sleep(TEMPO)
 
         case "4":
-            valor = float(input("Valor da transferência para Conta 9999: "))
+            valor = float(input("\nValor da transferência para Conta de destino 9999: "))
             conta.transferir(valor, conta2)
-            time.sleep(TEMPO)
+            salvar_contas(conta)
+            time.sleep(7)
 
         case "5":
             salvar_contas(conta)
-            time.sleep(TEMPO)    
-                            
-        case "6":
             print("\nSaindo... Obrigado por utilizar nosso sistema!")
             time.sleep(TEMPO)
             break
             
         case _:
-            print("Opção inválida!")
+            print("\nOpção inválida!")
             time.sleep(TEMPO)
